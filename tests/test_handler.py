@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Any, cast
 from unittest.mock import AsyncMock, patch
 
 from axio_tools_docker.handler import build_sandbox_exec, build_sandbox_read, build_sandbox_write
@@ -13,7 +14,7 @@ async def test_exec_handler_forwards_to_manager() -> None:
     manager.exec = AsyncMock(return_value="output")  # type: ignore[method-assign]
 
     handler_cls = build_sandbox_exec(manager)
-    instance = handler_cls(command="echo hi", timeout=10)
+    instance = cast(type[Any], handler_cls)(command="echo hi", timeout=10)
 
     with patch.object(SandboxManager, "docker_available", return_value=True):
         result = await instance()
@@ -27,7 +28,7 @@ async def test_write_handler_forwards_to_manager() -> None:
     manager.write_file = AsyncMock(return_value="Wrote /workspace/test.py")  # type: ignore[method-assign]
 
     handler_cls = build_sandbox_write(manager)
-    instance = handler_cls(path="/workspace/test.py", content="print('hi')")
+    instance = cast(type[Any], handler_cls)(path="/workspace/test.py", content="print('hi')")
 
     with patch.object(SandboxManager, "docker_available", return_value=True):
         result = await instance()
@@ -41,7 +42,7 @@ async def test_read_handler_forwards_to_manager() -> None:
     manager.read_file = AsyncMock(return_value="file content")  # type: ignore[method-assign]
 
     handler_cls = build_sandbox_read(manager)
-    instance = handler_cls(path="/workspace/test.py")
+    instance = cast(type[Any], handler_cls)(path="/workspace/test.py")
 
     with patch.object(SandboxManager, "docker_available", return_value=True):
         result = await instance()
@@ -53,7 +54,7 @@ async def test_read_handler_forwards_to_manager() -> None:
 async def test_exec_handler_returns_error_when_docker_missing() -> None:
     manager = SandboxManager()
     handler_cls = build_sandbox_exec(manager)
-    instance = handler_cls(command="echo hi")
+    instance = cast(type[Any], handler_cls)(command="echo hi")
 
     with patch.object(SandboxManager, "docker_available", return_value=False):
         result = await instance()
@@ -64,7 +65,7 @@ async def test_exec_handler_returns_error_when_docker_missing() -> None:
 async def test_write_handler_returns_error_when_docker_missing() -> None:
     manager = SandboxManager()
     handler_cls = build_sandbox_write(manager)
-    instance = handler_cls(path="/test", content="x")
+    instance = cast(type[Any], handler_cls)(path="/test", content="x")
 
     with patch.object(SandboxManager, "docker_available", return_value=False):
         result = await instance()
@@ -75,7 +76,7 @@ async def test_write_handler_returns_error_when_docker_missing() -> None:
 async def test_read_handler_returns_error_when_docker_missing() -> None:
     manager = SandboxManager()
     handler_cls = build_sandbox_read(manager)
-    instance = handler_cls(path="/test")
+    instance = cast(type[Any], handler_cls)(path="/test")
 
     with patch.object(SandboxManager, "docker_available", return_value=False):
         result = await instance()
