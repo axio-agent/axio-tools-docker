@@ -1,15 +1,20 @@
 [project]
 name = "axio-tools-docker"
-version = "0.2.2"
+version = "0.2.3"
 description = "Docker sandbox tools for Axio"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
+keywords = ["llm", "agent", "ai", "docker", "sandbox", "tools"]
 dependencies = ["axio"]
 
 [project.entry-points."axio.tools.settings"]
 docker = "axio_tools_docker.plugin:DockerPlugin"
 
+
+[project.urls]
+Homepage = "https://github.com/axio-agent/axio-tools-docker"
+Repository = "https://github.com/axio-agent/axio-tools-docker"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
